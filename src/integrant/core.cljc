@@ -68,7 +68,7 @@
   (if (vector? k) (composite-keyword k) k))
 
 (defn- ambiguous-key-exception [config key matching-keys]
-  (ex-info (str "Ambiguous key: " key ". Found multiple candidates: "
+  (ex-info (str "Ambiguous key: " key " Found multiple candidates: "
                 (str/join ", " matching-keys))
            {:reason ::ambiguous-key
             :config config
