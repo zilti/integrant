@@ -12,6 +12,7 @@
 
 (defrecord Ref    [key] RefLike (ref-key [_] key))
 (defrecord RefSet [key] RefLike (ref-key [_] key))
+(defrecord RefMap [key] RefLike (ref-key [_] key))
 
 (defn- composite-key? [keys]
   (and (vector? keys) (every? qualified-keyword? keys)))
@@ -33,6 +34,12 @@
   {:pre [(valid-config-key? key)]}
   (->RefSet key))
 
+(defn refmap
+  "Create a map of references to all matching top-level keys in a config map."
+  [key]
+  {:pre [(valid-config-key? key)]}
+  (->RefMap key))
+
 (defn ref?
   "Return true if its argument is a ref."
   [x]
@@ -42,6 +49,11 @@
   "Return true if its argument is a refset."
   [x]
   (instance? RefSet x))
+
+(defn refmap?
+  "Return true if its argument is a refmap."
+  [x]
+  (instance? RefMap x))
 
 (defn reflike?
   "Return true if its argument is a ref or a refset."
@@ -218,11 +230,15 @@
 (defn- resolve-refset [config refset]
   (set (map val (find-derived config (ref-key refset)))))
 
+(defn- resolve-refmap [config refmap]
+  (into {} (find-derived config (ref-key refmap))))
+
 (defn- expand-key [config value]
   (walk/postwalk
    #(cond
       (ref? %)    (resolve-ref config %)
       (refset? %) (resolve-refset config %)
+      (refmap? %) (resolve-refmap config %)
       :else       %)
    value))
 
