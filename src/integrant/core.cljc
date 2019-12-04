@@ -81,7 +81,7 @@
   [key candidate]
   (let [key (normalize-key key)]
     (if (vector? candidate)
-      (every? #(isa? key %) candidate)
+      (some? #(isa? key %) candidate)
       (isa? key candidate))))
 
 (defn find-derived
