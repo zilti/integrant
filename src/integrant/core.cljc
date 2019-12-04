@@ -466,7 +466,7 @@
           resolve-key)))
 
 (defn suspend!
-  "Suspend a system map by applying suspend-key! in reverse dependency order."
+  "Suspend a system map by applying `suspend-key!` in reverse dependency order."
   ([system]
    (suspend! system (keys system)))
   ([system keys]
