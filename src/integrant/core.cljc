@@ -68,7 +68,7 @@
   (if (vector? k) (composite-keyword k) k))
 
 (defn- ambiguous-key-exception [config key matching-keys]
-  (ex-info (str "Ambiguous key: " key ". Found multiple candidates: "
+  (ex-info (str "Ambiguous key: " key " Found multiple candidates: "
                 (str/join ", " matching-keys))
            {:reason ::ambiguous-key
             :config config
@@ -466,7 +466,7 @@
           resolve-key)))
 
 (defn suspend!
-  "Suspend a system map by applying suspend-key! in reverse dependency order."
+  "Suspend a system map by applying `suspend-key!` in reverse dependency order."
   ([system]
    (suspend! system (keys system)))
   ([system keys]
